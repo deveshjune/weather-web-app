@@ -1,11 +1,9 @@
-
-
 import React, { useState, useEffect } from 'react'
 import CityPanel from './CityPanel'
 import './WeatherNow.css'
 
-
-export function getWeatherIcon (weatherCode) {
+// Helper function to determine weather icon based on weather code
+export function getWeatherIcon(weatherCode) {
   if (weatherCode <= 3) return '☀️'
   if (weatherCode <= 48) return '☁️'
   if (weatherCode <= 67) return '🌧️'
@@ -14,6 +12,7 @@ export function getWeatherIcon (weatherCode) {
 }
 
 export default function WeatherNow() {
+  // State variables
   const [city, setCity] = useState('')
   const [weather, setWeather] = useState(null)
   const [forecast, setForecast] = useState(null)
@@ -21,6 +20,7 @@ export default function WeatherNow() {
   const [error, setError] = useState('')
   const [defaultCities, setDefaultCities] = useState([])
 
+  // Fetch weather data for default cities on component mount
   useEffect(() => {
     const fetchDefaultCities = async () => {
       const cities = ['Delhi', 'New York', 'Mumbai', 'Kolkata']
@@ -38,25 +38,28 @@ export default function WeatherNow() {
     fetchDefaultCities()
   }, [])
 
-  //API for forecast functionality
+  // API function to fetch coordinates for a given city
   const fetchCoordinates = async (cityName) => {
     const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${cityName}&count=1&language=en&format=json`)
     const data = await response.json()
     return data.results[0]
   }
 
+  // API function to fetch forecast data
   const fetchForecast = async (latitude, longitude) => {
     const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&timezone=auto`)
     const data = await response.json()
     return data.daily
   }
 
+  // API function to fetch current weather data
   const fetchCurrentWeather = async (latitude, longitude) => {
     const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&timezone=auto`)
     const data = await response.json()
     return data.current_weather
   }
 
+  // Function to handle weather search
   const fetchWeather = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -78,7 +81,7 @@ export default function WeatherNow() {
     }
   }
 
-  
+  // Function to handle back button click
   const handleBack = () => {
     setCity('')
     setWeather(null)
@@ -89,6 +92,7 @@ export default function WeatherNow() {
   return (
     <div className="weather-now">
       <h1>Weather Now</h1>
+      {/* Search form */}
       <form onSubmit={fetchWeather}>
         <input
           type="text"
@@ -102,14 +106,17 @@ export default function WeatherNow() {
         </button>
       </form>
 
+      {/* Error message */}
       {error && <p className="error">{error}</p>}
 
+      {/* Back button */}
       {(weather || forecast) && (
         <button onClick={handleBack} className="back-button">
           Back to Home
         </button>
       )}
 
+      {/* Weather information */}
       {weather && forecast && (
         <div className="weather-info">
           <h2>Weather in {city}</h2>
@@ -126,6 +133,7 @@ export default function WeatherNow() {
         </div>
       )}
 
+      {/* Default cities panel */}
       {!weather && !forecast && defaultCities.length > 0 && (
         <>
           <h2>Popular Cities</h2>
@@ -135,3 +143,6 @@ export default function WeatherNow() {
     </div>
   )
 }
+
+
+
