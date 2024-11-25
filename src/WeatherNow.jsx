@@ -4,11 +4,19 @@ import './WeatherNow.css'
 
 // Helper function to determine weather icon based on weather code
 export function getWeatherIcon(weatherCode) {
-  if (weatherCode <= 3) return '☀️'
-  if (weatherCode <= 48) return '☁️'
-  if (weatherCode <= 67) return '🌧️'
-  if (weatherCode <= 77) return '❄️'
-  return '⛈️'
+  if (weatherCode >= 0 && weatherCode <= 1) return '☀️'; // Clear sky
+  if (weatherCode === 2) return '🌤️'; // Partly cloudy
+  if (weatherCode === 3) return '☁️'; // Overcast
+  if (weatherCode >= 45 && weatherCode <= 48) return '🌫️'; // Fog
+  if (weatherCode >= 51 && weatherCode <= 55) return '🌧️'; // Drizzle
+  if (weatherCode >= 56 && weatherCode <= 57) return '🌨️'; // Freezing Drizzle
+  if (weatherCode >= 61 && weatherCode <= 65) return '🌧️'; // Rain
+  if (weatherCode >= 66 && weatherCode <= 67) return '🌨️'; // Freezing Rain
+  if (weatherCode >= 71 && weatherCode <= 77) return '❄️'; // Snow
+  if (weatherCode >= 80 && weatherCode <= 82) return '🌦️'; // Rain showers
+  if (weatherCode >= 85 && weatherCode <= 86) return '🌨️'; // Snow showers
+  if (weatherCode >= 95 && weatherCode <= 99) return '⛈️'; // Thunderstorm
+  return '❓'; // Unknown weather code
 }
 
 export default function WeatherNow() {
@@ -143,6 +151,4 @@ export default function WeatherNow() {
     </div>
   )
 }
-
-
 
